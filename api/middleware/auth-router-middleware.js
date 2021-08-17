@@ -63,27 +63,31 @@ async function checkUsernameExists(req, res, next) {
       next(err);
     });
 }
+// checkCredentials not needed b/c of additional authentication in route handler.
 // Check for username & password
-async function checkCredentials(req, res, next) {
-  const credentials = {
-    username: req.body.username,
-    password: req.body.password,
-  };
-  await Users.findBy(credentials)
-    .then((user) => {
-      if (user.length) {
-        req.user = user[0];
-        next();
-      } else next(res.status(401).json({ message: 'Invalid Credentials' }));
-    })
-    .catch((err) => {
-      next(err);
-    });
-}
+// async function checkCredentials(req, res, next) {
+//   const credentials = {
+//     username: req.body.username,
+//     password: req.body.password,
+//   };
+//   await Users.findBy(credentials)
+//     .then((user) => {
+//       if (user.length) {
+//         req.user = user[0];
+//         next();
+//       } else
+//         next(
+//           res.status(401).json({ message: 'Invalid Credentials in middleware' })
+//         );
+//     })
+//     .catch((err) => {
+//       next(err);
+//     });
+// }
 
 module.exports = {
   checkForUsernameAndPassword,
   checkUsernameFree,
   checkUsernameExists,
-  checkCredentials,
+  // checkCredentials,
 };

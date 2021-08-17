@@ -47,13 +47,9 @@ router.post(
   }
 );
 
-router.post(
-  '/login',
-  checkForUsernameAndPassword,
-  checkCredentials,
-  (req, res, next) => {
-    // res.end('implement login, please!');
-    /*
+router.post('/login', checkForUsernameAndPassword, (req, res, next) => {
+  // res.end('implement login, please!');
+  /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
 
@@ -77,21 +73,20 @@ router.post(
       the response body should include a string exactly as follows: "invalid credentials".
   */
 
-    let { username, password } = req.body;
-    Users.findBy({ username })
-      .then(([user]) => {
-        if (user && bcrypt.compareSync(password, user.password)) {
-          const token = tokenBuilder(user);
-          res.status(200).json({
-            message: `welcome, ${user.username}`,
-            token,
-          });
-        } else {
-          next({ status: 401, message: 'invalid credentials' });
-        }
-      })
-      .catch(next);
-  }
-);
+  let { username, password } = req.body;
+  Users.findBy({ username })
+    .then(([user]) => {
+      if (user && bcrypt.compareSync(password, user.password)) {
+        const token = tokenBuilder(user);
+        res.status(200).json({
+          message: `welcome, ${user.username}`,
+          token,
+        });
+      } else {
+        next({ status: 401, message: 'invalid credentials' });
+      }
+    })
+    .catch(next);
+});
 
 module.exports = router;
